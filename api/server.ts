@@ -227,12 +227,10 @@ app.post("/api/scraper/run", async (_req: any, res: any) => {
     res.json({ success: true, message: "Scraper triggered", results: data });
   } catch (err: any) {
     console.error("scraper/run error", err);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: err?.message || "Scraper request failed",
-      });
+    res.status(500).json({
+      success: false,
+      message: err?.message || "Scraper request failed",
+    });
   }
 });
 
