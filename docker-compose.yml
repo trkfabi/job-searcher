@@ -1,0 +1,44 @@
+version: "3.9"
+
+networks:
+  job-searcher-network:
+    name: job-searcher-network
+
+volumes:
+  jobs_data: {}
+
+services:
+  api:
+    build: ./api
+    env_file:
+      - ./api/.env
+    environment:
+      - DB_PATH=/data/jobs.sqlite
+    volumes:
+      - jobs_data:/data
+    ports:
+      - "3333:3333"
+    networks:
+      - job-searcher-network
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "8083:80"
+    networks:
+      - job-searcher-network
+
+  scraper:
+    build: ./job-search
+    env_file:
+      - ./job-search/.env
+    environment:
+      - DB_PATH=/data/jobs.sqlite
+    volumes:
+      - jobs_data:/data
+    networks:
+      - job-searcher-network
+    # Ejecuta el scraper bajo demanda (para cron usar este comando):
+    command: ["sh", "-c", "node --env-file=.env --loader tsx src/index.ts"]
