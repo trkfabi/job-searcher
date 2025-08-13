@@ -5,6 +5,8 @@ import type { Job, Application } from "./types";
 const isLocal =
   typeof window !== "undefined" && window.location.hostname === "localhost";
 
+type SortKey = "scoreDesc" | "scoreAsc" | "dateDesc" | "dateAsc";
+
 const API = isLocal ? "http://localhost:3333/api" : __API_BASE__;
 
 function useJobs(query: string) {
@@ -64,6 +66,24 @@ export default function App() {
   const openApply = (job: Job) => setModal({ open: true, job });
   const closeApply = () => setModal({ open: false });
 
+  const [sortBy, setSortBy] = useState<SortKey>("scoreDesc");
+
+  const sortedJobs = useMemo(() => {
+    const arr = [...jobs];
+    const toTime = (d?: string) => (d ? Date.parse(d) : 0);
+    switch (sortBy) {
+      case "scoreAsc":
+        return arr.sort((a, b) => (a as any).score - (b as any).score);
+      case "dateDesc":
+        return arr.sort((a, b) => toTime(b.createdAt) - toTime(a.createdAt));
+      case "dateAsc":
+        return arr.sort((a, b) => toTime(a.createdAt) - toTime(b.createdAt));
+      case "scoreDesc":
+      default:
+        return arr.sort((a, b) => (b as any).score - (a as any).score);
+    }
+  }, [jobs, sortBy]);
+
   return (
     <div
       style={{
@@ -101,6 +121,16 @@ export default function App() {
                 borderRadius: 8,
               }}
             />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortKey)}
+              style={{ padding: 8, border: "1px solid #ddd", borderRadius: 8 }}
+            >
+              <option value="scoreDesc">Sort: Score ↓</option>
+              <option value="scoreAsc">Sort: Score ↑</option>
+              <option value="dateDesc">Sort: Date ↓</option>
+              <option value="dateAsc">Sort: Date ↑</option>
+            </select>
           </div>
 
           {loading ? (
@@ -112,23 +142,35 @@ export default function App() {
                   <th style={{ textAlign: "left", padding: 8 }}>Title</th>
                   <th style={{ textAlign: "left", padding: 8 }}>Company</th>
                   <th style={{ textAlign: "left", padding: 8 }}>Source</th>
+                  <th style={{ textAlign: "right", padding: 8 }}>Score</th>{" "}
+                  {/* nueva */}
                   <th style={{ textAlign: "left", padding: 8 }}>Found</th>
                   <th style={{ textAlign: "left", padding: 8 }}>Applied</th>
                   <th style={{ textAlign: "right", padding: 8 }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {jobs.map((job) => {
+                {sortedJobs.map((job) => {
                   const app = appsById.get(job.id);
                   return (
                     <tr key={job.id} style={{ borderTop: "1px solid #eee" }}>
                       <td style={{ padding: 8 }}>
-                        <a href={job.url} target="_blank">
+                        <a
+                          href={job.url}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
                           {job.title}
                         </a>
                       </td>
                       <td style={{ padding: 8 }}>{job.company}</td>
                       <td style={{ padding: 8 }}>{job.source}</td>
+                      <td
+                        style={{ padding: 8, textAlign: "right" }}
+                        title={(job as any).scoreReasons?.join("\n") || ""}
+                      >
+                        {(job as any).score ?? "—"}
+                      </td>
                       <td style={{ padding: 8 }}>
                         {job.createdAt
                           ? new Date(job.createdAt).toISOString().slice(0, 10)
