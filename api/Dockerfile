@@ -3,10 +3,10 @@ WORKDIR /app
 
 # Instalar deps (usa el lock que tengas)
 COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
-RUN if [ -f pnpm-lock.yaml ]; then corepack enable && pnpm i --prod; \
-    elif [ -f yarn.lock ]; then yarn install --production; \
-    elif [ -f package-lock.json ]; then npm ci --omit=dev; \
-    else npm i --omit=dev; fi
+RUN if [ -f pnpm-lock.yaml ]; then corepack enable && pnpm i; \
+    elif [ -f yarn.lock ]; then yarn install; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    else npm i; fi
 
 # Copiar código
 COPY . .
