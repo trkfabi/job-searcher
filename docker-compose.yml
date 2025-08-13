@@ -39,4 +39,4 @@ services:
       - jobs_data:/data
     networks:
       - job-searcher-network
-    command: ["sh", "-c", "node --env-file=.env --loader tsx src/index.ts"]
+    command: ["sh", "-c", "node --env-file=.env --import tsx src/index.ts"]

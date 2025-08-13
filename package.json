@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p .",
     "start": "tsx src/index.ts",
-    "daily": "node --env-file=.env --loader tsx src/index.ts --mode daily"
+    "daily": "node --env-file=.env --import tsx src/index.ts --mode daily"
   },
   "dependencies": {
     "axios": "^1.7.2",

@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:20-bullseye-slim AS base
 WORKDIR /app
 
 # Instalar deps (usa el lock que tengas)
