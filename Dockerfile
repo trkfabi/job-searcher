@@ -11,7 +11,7 @@ COPY . .
 
 ENV DB_PATH=/data/jobs.sqlite
 # Por defecto ejecuta el scraper (el compose ya define el command, aquí queda de respaldo)
-CMD ["node", "--env-file=.env", "--loader", "tsx", "src/index.ts"]
+CMD ["node", "--env-file=.env", "--import", "tsx", "src/index.ts"]
 
 
 # use it:

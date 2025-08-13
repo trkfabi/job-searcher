@@ -20,4 +20,4 @@ EXPOSE 3333
 # CMD ["node", "--loader", "tsx", "server.ts"]
 # Si compilas a dist/ en tu build:
 # CMD ["node", "dist/server.js"]
-CMD ["node", "--loader", "tsx", "server.ts"]
+CMD ["node", "--import", "tsx", "server.ts"]
