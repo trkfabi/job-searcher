@@ -84,6 +84,14 @@ export default function App() {
     }
   }, [jobs, sortBy]);
 
+  async function runScraper() {
+    const r = await fetch(`${API}/scraper/run`, { method: "POST" });
+    const j = await r.json();
+    alert(j.message || "Scraper executed");
+    // refresca la lista
+    setQ((q) => q); // dispara useEffect; o llama a un refetch si lo tienes
+  }
+
   return (
     <div
       style={{
@@ -121,6 +129,7 @@ export default function App() {
                 borderRadius: 8,
               }}
             />
+            <button onClick={runScraper}>Buscar ahora</button>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortKey)}

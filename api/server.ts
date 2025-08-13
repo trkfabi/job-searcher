@@ -207,5 +207,34 @@ app.patch("/api/applications/:jobId", (req: any, res: any) => {
   res.json({ success: true, message: "Updated", results: { jobId } });
 });
 
+app.post("/api/scraper/run", async (_req: any, res: any) => {
+  try {
+    // servicio interno "scraper" en la red docker, puerto 4000
+    const r = await fetch("http://scraper:4000/run", {
+      method: "POST",
+      // si quieres, pasa parámetros dinámicos:
+      // body: JSON.stringify({ keywords: KEYWORDS, minSalary: 50000 }),
+      // headers: { "Content-Type": "application/json" },
+    });
+
+    if (!r.ok) {
+      const text = await r.text();
+      return res
+        .status(502)
+        .json({ success: false, message: `Scraper error: ${text}` });
+    }
+    const data = await r.json();
+    res.json({ success: true, message: "Scraper triggered", results: data });
+  } catch (err: any) {
+    console.error("scraper/run error", err);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: err?.message || "Scraper request failed",
+      });
+  }
+});
+
 const PORT = Number(process.env.PORT || 3333);
 app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));

@@ -27,13 +27,14 @@ services:
 
   scraper:
     build:
-      context: .
+      context: . # raíz del repo (donde está scraper-server.ts y src/)
     env_file:
       - ./.env
     environment:
       - DB_PATH=/data/jobs.sqlite
+      - SCRAPER_PORT=4000
     volumes:
       - ./data:/data
     networks:
       - job-searcher-network
-    command: ["sh", "-c", "node --env-file=.env --import tsx src/index.ts"]
+    command: ["sh", "-c", "node --import tsx scraper-server.ts"]
