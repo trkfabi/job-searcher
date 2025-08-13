@@ -12,7 +12,7 @@ function useJobs(query: string) {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    fetch(`${API}/api/jobs?query=${encodeURIComponent(query)}`)
+    fetch(`${API}/jobs?query=${encodeURIComponent(query)}`)
       .then((r) => r.json())
       .then((j) => setData(j.results || []))
       .finally(() => setLoading(false));
@@ -23,14 +23,14 @@ function useJobs(query: string) {
 function useApplications() {
   const [apps, setApps] = useState<Application[]>([]);
   const refresh = () =>
-    fetch(`${API}/api/applications`)
+    fetch(`${API}/applications`)
       .then((r) => r.json())
       .then((j) => setApps(j.results || []));
   useEffect(() => {
     refresh();
   }, []);
   const upsert = async (payload: Application) => {
-    await fetch(`${API}/api/applications`, {
+    await fetch(`${API}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -38,7 +38,7 @@ function useApplications() {
     refresh();
   };
   const patch = async (jobId: string, body: Partial<Application>) => {
-    await fetch(`${API}/api/applications/${jobId}`, {
+    await fetch(`${API}/applications/${jobId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
