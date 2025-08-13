@@ -31,9 +31,9 @@ services:
       - job-searcher-network
 
   scraper:
-    build: ./job-search
+    build: ./job-searcher
     env_file:
-      - ./job-search/.env
+      - ./job-searcher/.env
     environment:
       - DB_PATH=/data/jobs.sqlite
     volumes:

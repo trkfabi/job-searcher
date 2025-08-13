@@ -25,7 +25,7 @@ Includes:
 
 ```
 .
-├─ job-search/            # Scraper (TypeScript)
+├─ job-searcher/            # Scraper (TypeScript)
 │  ├─ src/
 │  │  ├─ providers/       # greenhouse, lever, ashby, remotive, remoteok, wwr, linkedin (optional)
 │  │  ├─ templates/
@@ -51,10 +51,10 @@ Includes:
 
 ## 🚀 Getting Started
 
-### 1) Scraper (job-search)
+### 1) Scraper (job-searcher)
 
 ```bash
-cd job-search
+cd job-searcher
 cp .env.example .env
 pnpm i    # or npm i / yarn
 pnpm start
@@ -70,7 +70,7 @@ Outputs:
 
 ```bash
 cd api
-cp .env.example .env   # DB_PATH points to ../job-search/data/jobs.sqlite (adjust if paths change)
+cp .env.example .env   # DB_PATH points to ../job-searcher/data/jobs.sqlite (adjust if paths change)
 pnpm i
 pnpm dev               # http://localhost:3333
 ```
@@ -88,7 +88,7 @@ pnpm dev               # http://localhost:5173
 
 ## ⚙️ Configuration (.env)
 
-`job-search/.env` (example):
+`job-searcher/.env` (example):
 
 ```
 KEYWORDS=node,express,typescript,javascript,php,react native,titanium
@@ -111,7 +111,7 @@ SERPAPI_KEY=your_optional_api_key   # if you want LinkedIn via SerpAPI
 
 ```
 PORT=3333
-DB_PATH=../job-search/data/jobs.sqlite
+DB_PATH=../job-searcher/data/jobs.sqlite
 ```
 
 `frontend/.env`:
@@ -178,7 +178,7 @@ VITE_API_URL=http://localhost:3333
 Example: every day at 09:10 (local time) run the scraper:
 
 ```
-10 9 * * * cd /path/job-search && pnpm start >> logs.txt 2>&1
+10 9 * * * cd /path/job-searcher && pnpm start >> logs.txt 2>&1
 ```
 
 ---
@@ -206,7 +206,7 @@ Example: every day at 09:10 (local time) run the scraper:
 - **`TypeError: Cannot open database because the directory does not exist`**  
   The scraper already creates the DB folder automatically. If you see this in the API, check `DB_PATH` and ensure the parent path exists:
   ```
-  mkdir -p job-search/data
+  mkdir -p job-searcher/data
   ```
 
 ---
