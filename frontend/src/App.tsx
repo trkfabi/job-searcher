@@ -5,12 +5,7 @@ import type { Job, Application } from "./types";
 const isLocal =
   typeof window !== "undefined" && window.location.hostname === "localhost";
 
-// En .env de frontend puedes setear VITE_API_BASE si quieres sobreescribir
-const API =
-  (import.meta as any).env?.VITE_API_BASE ??
-  (isLocal ? "http://localhost:3333/api" : "/job-searcher/api");
-
-//const API = (import.meta as any).env?.VITE_API_URL || "http://localhost:3333";
+const API = isLocal ? "http://localhost:3333/api" : __API_BASE__;
 
 function useJobs(query: string) {
   const [data, setData] = useState<Job[]>([]);
